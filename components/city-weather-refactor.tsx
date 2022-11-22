@@ -1,4 +1,3 @@
-// eslint-disable @typescript-eslint/no-use-before-define
 import { useState, useEffect } from "react";
 
 // to get api key: https://openweathermap.org/appid
@@ -22,25 +21,21 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
 
-  useEffect(() => {
+  const getWeatherData = async () => {
     setLoading(true);
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
-    )
-      .then((res) => {
-        if (res.status !== 200) {
-          throw new Error(res.status.toString());
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setWeatherResult(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching weather data", error);
-        setError(true);
-      });
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
+    if (response.status !== 200) {
+      setError(true)
+    } else {
+      setError(false)
+      const data: WeatherResult = await response.json();
+      setWeatherResult(data);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getWeatherData();
   }, [city]);
 
   return (
