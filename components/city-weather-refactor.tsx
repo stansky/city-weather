@@ -20,27 +20,37 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
     null
   );
   const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error(res.status.toString());
+        }
+        return res.json();
+      })
       .then((data) => {
         setWeatherResult(data);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data", error);
+        setError(true);
       });
   }, [city]);
 
   return (
     <>
-      {weatherResult && (
-        <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex flex-col items-center content-center space-y-4">
-          <div className="text-xl text-black uppercase font-bold">{city}</div>
+      {weatherResult && !isError && (
+        <div className="py-10 px-10 w-fit mx-auto bg-white rounded-xl shadow-lg flex flex-col items-center content-center space-y-4">
+          <div data-testid="city-name" className="text-xl text-black uppercase font-bold">{city}</div>
+          {isLoading && <span className="sr-only">Loading Weather Data</span>}
           <div className="space-y-0.5">
             <img
-              className="h-12 w-12"
               src={`http://openweathermap.org/img/wn/${weatherResult.weather[0]?.icon}@2x.png`}
               alt={weatherResult.weather[0]?.description}
             />
@@ -51,11 +61,19 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
             </p>
             <p className="text-lg text-slate-500">
               Temperature:
-              <span className="text-2xl font-medium text-black">
-                 &nbsp;{KtoF(weatherResult.main.temp).toFixed(0)} &#8457;
+              <span className="text-3xl font-medium text-black">
+                &nbsp;{KtoF(weatherResult.main.temp).toFixed(0)} &#8457;
               </span>
             </p>
           </div>
+        </div>
+      )}
+      {isError && (
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline">Error fetching weather data</span>
         </div>
       )}
     </>

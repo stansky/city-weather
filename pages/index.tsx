@@ -11,7 +11,7 @@ export default function IndexPage() {
         onSubmit={(e) => {
           e.preventDefault();
           const formdata = new FormData(e.currentTarget);
-          const cityName = formdata.get("city");
+          const cityName = formdata.get("weather-input");
           if (cityName) {
             setCity(cityName.toString());
           }
@@ -19,19 +19,20 @@ export default function IndexPage() {
       >
         <label
           className="flex items-center mr-0.5 min-w-fit px-2.5 text-black font-medium"
-          htmlFor="city"
+          htmlFor="weather-input"
         >
           Weather Search:{" "}
         </label>
         <input
           data-testid="weather-input"
-          id="city"
+          name="weather-input"
+          id="weather-input"
           className="rounded-md rounded-r-none block w-full focus:shadow-md py-2 px-3 text-gray-700"
           type="text"
-          name="city"
         />
         <button
           className="uppercase rounded-md rounded-l-none py-2 px-6 cursor-pointer tracking-wider text-md text-center bg-blue-500 text-white font-bold hover:bg-blue-600 hover:shadow-blue"
+          data-testid="weather-submit"
           type="submit"
         >
           Submit
