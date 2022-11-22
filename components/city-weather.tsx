@@ -13,21 +13,30 @@ interface CityWeatherState {
 }
 
 export class CityWeather extends Component<CityWeatherProps, CityWeatherState> {
-  public constructor(props) {
+  public constructor(props: CityWeatherProps) {
     super(props);
     this.state = {
-      weatherResult: null
+      weatherResult: null,
     };
   }
 
   public componentDidMount() {
-    const { city } = this.props;
+    this.updateWeather(this.props);
+  
+  }
+  public componentDidUpdate(prevProps: CityWeatherProps) {
+    if (this.props.city !== prevProps.city)
+    this.updateWeather(this.props);
+  }
+
+  public updateWeather(props: CityWeatherProps) {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?q=${props.city}&appid=${API_KEY}`
     )
       .then((r) => r.json())
       .then((result) => this.setState({ weatherResult: result }));
-  }
+      console.log(this.state)
+    }
 
   public render() {
     const { city } = this.props;
@@ -36,10 +45,14 @@ export class CityWeather extends Component<CityWeatherProps, CityWeatherState> {
     return (
       <div>
         <h1>{city}</h1>
-        <div>
-          Temperature: {KtoF(weatherResult.main.temp).toFixed(0)} &#8457;
-        </div>
-        <div>Descripiton: {weatherResult.weather[0].description}</div>
+        {weatherResult && (
+          <>
+            <div>
+              Temperature: {KtoF(weatherResult.main.temp).toFixed(0)} &#8457;
+            </div>
+            <div>Descripiton: {weatherResult.weather[0].description}</div>
+          </>
+        )}
       </div>
     );
   }
