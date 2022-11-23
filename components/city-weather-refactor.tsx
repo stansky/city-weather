@@ -14,6 +14,7 @@ interface WeatherResult {
   weather: [
     {
       description: string;
+      icon: string;
     }
   ];
 }
