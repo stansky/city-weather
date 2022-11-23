@@ -56,10 +56,10 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
       {isLoading && <span className="sr-only">Loading Weather Data</span>}
 
       {weatherResult && !isError && (
-        <div className="py-10 px-10 w-fit mx-auto bg-white rounded-xl shadow-lg flex flex-col items-center content-center space-y-4">
+        <div className="py-5 px-10 w-fit mx-auto bg-white rounded-xl shadow-lg flex flex-col items-center content-center space-y-4">
           <h1
             data-testid="city-name"
-            className="text-xl text-black uppercase font-bold"
+            className="text-2xl text-gray-600 uppercase font-bold"
           >
             {city}
           </h1>
