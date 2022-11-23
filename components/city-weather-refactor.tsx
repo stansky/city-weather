@@ -29,6 +29,7 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
     const getWeatherData = async () => {
       setLoading(true);
       setError(false);
+      setWeatherResult(null);
 
       const urlParams = new URLSearchParams({
         q: city,
