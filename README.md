@@ -58,13 +58,13 @@ The simple fix to this would be to wrap the `CityWeather` return html in a jsx c
 
 Due to the API call being in the `ComponentDidMount` lifecycle hook, the component will only display the weather data for the first city search. 
 
-To fix this, I moved the API call logic to a new function, and call that in `ComponentDidMount` as well as `ComponentDidUpdate`, which will fire everytime the city prop is changed from the previous value. This will let the user search for a new city and display the weather without needing to reload the page. 
+To fix this, I moved the API call logic to a new function, and call that in `ComponentDidMount` as well as `ComponentDidUpdate`, which will fire every-time the city prop is changed from the previous value. This will let the user search for a new city and display the weather without needing to reload the page. 
 
 ## Refactoring
 
-The main refactoring work was changing this from a class component to a functional component so I could use the `useEffect` hook. 
+The main refactoring work was changing this from a class component to a functional component, so I could use the `useEffect` hook. 
 
-The logic is similar to before; `useEffect` will call an async method to do a fetch call to the weather API. The method will handle setting simple states for `loading` and `error` to condtionally render a screen-reader only message for loading, an an alert message for an unsuccessfull API call. 
+The logic is similar to before; `useEffect` will call an async method to do a fetch call to the weather API. The method will handle setting simple states for `loading` and `error` to conditionally render a screen-reader only message for loading, an alert message for an unsuccessful API call. 
 
 The `useEffect` hook takes in the city prop as a param, so when that changes, the API will be called again to get new weather data. 
 
@@ -74,3 +74,5 @@ An `htmlFor` attribute was added to the search label to bring focus to the input
 The design layout is flexbox based, with the search box doing a column based flex layout, and the weather data being row based. Items are centered vertically and horizontally, with padding on the containers, and margins between stacked elements. 
 
 The design is responsive, although small screens could be better suited by a vertically stacked search input section. 
+
+For accessibility consideration, the design could be modified to include an `<h1>` tag for `Weather Results` and the city name could be an `<h2>`
