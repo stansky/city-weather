@@ -11,7 +11,11 @@ interface WeatherResult {
   main: {
     temp: number;
   };
-  weather: any[];
+  weather: [
+    {
+      description: string;
+    }
+  ];
 }
 
 const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
@@ -21,29 +25,42 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
 
-  const getWeatherData = async () => {
-    setLoading(true);
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
-    if (response.status !== 200) {
-      setError(true)
-    } else {
-      setError(false)
-      const data: WeatherResult = await response.json();
-      setWeatherResult(data);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    getWeatherData();
+    const getWeatherData = async () => {
+      setLoading(true);
+      setError(false);
+
+      const urlParams = new URLSearchParams({
+        q: city,
+        appid: API_KEY,
+      });
+
+      const response = await fetch(
+        "https://api.openweathermap.org/data/2.5/weather?" + urlParams
+      );
+      if (response.status !== 200) {
+        setError(true);
+      } else {
+        const data: WeatherResult = await response.json();
+        setWeatherResult(data);
+      }
+      setLoading(false);
+    };
+    getWeatherData().catch(console.error);
   }, [city]);
 
   return (
     <>
+      {isLoading && <span className="sr-only">Loading Weather Data</span>}
+
       {weatherResult && !isError && (
         <div className="py-10 px-10 w-fit mx-auto bg-white rounded-xl shadow-lg flex flex-col items-center content-center space-y-4">
-          <div data-testid="city-name" className="text-xl text-black uppercase font-bold">{city}</div>
-          {isLoading && <span className="sr-only">Loading Weather Data</span>}
+          <h1
+            data-testid="city-name"
+            className="text-xl text-black uppercase font-bold"
+          >
+            {city}
+          </h1>
           <div className="space-y-0.5">
             <img
               src={`http://openweathermap.org/img/wn/${weatherResult.weather[0]?.icon}@2x.png`}
@@ -56,9 +73,9 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
             </p>
             <p className="text-lg text-slate-500">
               Temperature:
-              <span className="text-3xl font-medium text-black">
+              <strong className="text-3xl font-medium text-black">
                 &nbsp;{KtoF(weatherResult.main.temp).toFixed(0)} &#8457;
-              </span>
+              </strong>
             </p>
           </div>
         </div>
