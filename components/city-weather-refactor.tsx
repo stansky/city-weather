@@ -36,7 +36,7 @@ const CityWeatherRefactor = ({ city }: CityWeatherProps) => {
       });
 
       const response = await fetch(
-        "https://api.openweathermap.org/data/2.5/weather?" + urlParams
+        `https://api.openweathermap.org/data/2.5/weather?${urlParams}`
       );
       if (response.status !== 200) {
         setError(true);
