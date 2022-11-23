@@ -44,3 +44,33 @@ App crashes
 
 2. Talk about your changes
    - For the refactor and other accompanying tasks, include any other thoughts, assumptions, or known compromises in how you approached the work.
+
+
+
+----
+
+## Bug Findings
+The bug experienced was the in the `CityWeather` component. The component makes an api call and renders the results in the DOM. 
+
+Due to the API call being made in the `ComponentDidMount` lifecycle hook, the DOM would attempt to access properties on a null object while rendering, even though the API call was pending, resulting in error. 
+
+The simple fix to this would be to wrap the `CityWeather` return html in a jsx conditional, i.e. `{weatherResult && ( ... )}`. This would prevent the error when the user searches for a city. 
+
+Due to the API call being in the `ComponentDidMount` lifecycle hook, the component will only display the weather data for the first city search. 
+
+To fix this, I moved the API call logic to a new function, and call that in `ComponentDidMount` as well as `ComponentDidUpdate`, which will fire everytime the city prop is changed from the previous value. This will let the user search for a new city and display the weather without needing to reload the page. 
+
+## Refactoring
+
+The main refactoring work was changing this from a class component to a functional component so I could use the `useEffect` hook. 
+
+The logic is similar to before; `useEffect` will call an async method to do a fetch call to the weather API. The method will handle setting simple states for `loading` and `error` to condtionally render a screen-reader only message for loading, an an alert message for an unsuccessfull API call. 
+
+The `useEffect` hook takes in the city prop as a param, so when that changes, the API will be called again to get new weather data. 
+
+An `htmlFor` attribute was added to the search label to bring focus to the input `onClick`. 
+
+## Design
+The design layout is flexbox based, with the search box doing a column based flex layout, and the weather data being row based. Items are centered vertically and horizontally, with padding on the containers, and margins between stacked elements. 
+
+The design is responsive, although small screens could be better suited by a vertically stacked search input section. 

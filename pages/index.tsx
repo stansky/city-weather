@@ -21,7 +21,7 @@ export default function IndexPage() {
           className="flex items-center mr-0.5 min-w-fit px-2.5 text-black font-medium"
           htmlFor="weather-input"
         >
-          Weather Search:{" "}
+          Weather Search:
         </label>
         <input
           data-testid="weather-input"
