@@ -52,9 +52,9 @@ App crashes
 ## Bug Findings
 The bug experienced was the in the `CityWeather` component. The component makes an api call and renders the results in the DOM. 
 
-Due to the API call being made in the `ComponentDidMount` lifecycle hook, the DOM would attempt to access properties on a null object while rendering, even though the API call was pending, resulting in error. 
+Due to the API call being made in the `ComponentDidMount` lifecycle hook, the code would attempt to access properties on a null object while rendering, even though the API call was pending, resulting in error. 
 
-The simple fix to this would be to wrap the `CityWeather` return html in a jsx conditional, i.e. `{weatherResult && ( ... )}`. This would prevent the error when the user searches for a city. 
+The simple fix to this would be to wrap the weather results with a conditional, i.e. `{weatherResult && ( ... )}`. This would prevent the error when the user searches for a city. 
 
 Due to the API call being in the `ComponentDidMount` lifecycle hook, the component will only display the weather data for the first city search. 
 
@@ -68,7 +68,7 @@ The logic is similar to before; `useEffect` will call an async method to do a fe
 
 The `useEffect` hook takes in the city prop as a param, so when that changes, the API will be called again to get new weather data. 
 
-An `htmlFor` attribute was added to the search label to bring focus to the input `onClick`. 
+An `htmlFor` attribute was added to the search label to bring focus to the input on click. 
 
 ## Design
 The design layout is flexbox based, with the search box doing a column based flex layout, and the weather data being row based. Items are centered vertically and horizontally, with padding on the containers, and margins between stacked elements. 
