@@ -50,7 +50,7 @@ App crashes
 ----
 
 ## Bug Findings
-The bug experienced was the in the `CityWeather` component. The component makes an api call and renders the results in the DOM. 
+The bug experienced was the in the `CityWeather` component. The component makes an api call and renders the results in the html. 
 
 Due to the API call being made in the `ComponentDidMount` lifecycle hook, the code would attempt to access properties on a null object while rendering, even though the API call was pending, resulting in error. 
 
